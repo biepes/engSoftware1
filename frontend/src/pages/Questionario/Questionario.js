@@ -1,18 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
-import AddressForm from './SintomasGerais.js';
-import PaymentForm from './PaymentForm';
-import Review from './Review';
 
 import Grid from '@material-ui/core/Grid';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -23,6 +16,9 @@ import { connect } from 'react-redux';
 import { setIsAuthenticated } from '../../actions';
 // Routes
 import { withRouter } from 'react-router-dom';
+
+import api from '../../services/api'
+import Respostas from './respostas'
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -63,49 +59,67 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = ['Sintomas gerais', 'Comorbidades', 'Sintomas especificos'];
 
-const stepsComponents = {0: [
-  'difRespirar',
-  'dorGarganta',
-  'febre',
-  'tosse'
+const stepsComponents = {
+0: [
+  ['difRespirar', 'Dificuldade de Respirar'],
+  ['dorGarganta', 'Dor de Garganta'],
+  ['febre', 'Febre'],
+  ['tosse', 'Tosse']
 ],
 1: [
-  'a',
-  'a',
-  'a',
-  'tosse'
+  ['diabetes', 'Diabetes'],
+  ['doencaCardiaca', 'Doença Cardíaca'],
+  ['doencaRenal', 'Doença Renal Crônica'],
+  ['doencaRespiratoria', 'Doença Respiratória Crônica'],
+  ['pressaoAlta', 'Pressão Alta']
+
 ],
 2: [
-  'b',
-  'b',
-  'b',
-  'tosbse'
+  ['bocaOuDedoRoxo', 'Boca ou ponta dos dedos roxa'],
+  ['palidez', 'Palidez'],
+  ['pressaoBaixa', 'Pressão baixa'],
+  ['respiracaoRapida', 'Respirando muito rápido'],
+  ['desmaio', 'Sensação de desmaio'],
 ]}
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return <PaymentForm />;
-    case 2:
-      return <Review />;
-    default:
-      throw new Error('Unknown step');
-  }
-}
+const stepsComponentsTime = [
+  ['today','Hoje'],
+  ['oneToSeven','1 a 7 dia(s)'],
+  ['eightToFourTeen', '8 a 14 dias'],
+  ['moreFourTeen', 'Mais de 14 dias']
+]
 
 const Questionario = () => {
   const classes = useStyles();
+
   const [activeStep, setActiveStep] = useState(0);
-  const [sintomasGerais, setSintomasGerais] = useState({
+  const [questoes, setQuestoes] = useState({
+    0: {
     difRespirar: false,
     dorGarganta: false,
     febre: false,
     tosse: false,
-  });
-  const [comorbidades, setComorbidades] = useState([]);
-  const [sintomasEspecificos, setSintomasEspecificos] = useState([]);
+    tempo: {
+      today: false,
+      oneToSeven: false,
+      eightToFourTeen: false,
+      moreFourTeen: false
+    }
+  },
+  1: {
+    diabetes: false,
+    doencaCardiaca: false,
+    doencaRenal: false,
+    doencaRespiratoria: false,
+    pressaoAlta: false
+  },
+  2: {
+    bocaOuDedoRoxo: false,
+    palidez: false,
+    pressaoBaixa: false,
+    respiracaoRapida: false,
+    desmaio: false
+  }})
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -115,20 +129,52 @@ const Questionario = () => {
     setActiveStep(activeStep - 1);
   };
 
+  const titulo = (title0, title1, title2) => {
+    if (activeStep === 0) {
+      return(
+        <Typography variant="h6" gutterBottom>
+          {title0}
+        </Typography>
+      )
+    }
+    if (activeStep === 1) {
+      return(
+        <Typography variant="h6" gutterBottom>
+          {title1}
+        </Typography>
+      )
+    }
+    if (activeStep === 2) {
+      return(
+        <Typography variant="h6" gutterBottom>
+          {title2}
+        </Typography>
+      )
+    }
+  }
+
+  const respostaQuestionario = () => {
+    // const response = await api.post('/signup', {
+    //   nome: nome,
+    //   cpf: cpf,
+    //   cep: cep,
+    //   email: email,
+    //   senha: senha
+    // })
+    // const response = respostas()
+    return (
+      <div>
+        <Respostas resposta={3} />
+      </div>
+    )
+  }
+
   return (
     <React.Fragment>
-      <CssBaseline />
-      <AppBar position="absolute" color="default" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Company name
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <main className={classes.layout}>
+      <div className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h4" align="center">
-            Questionario
+            Questionário
           </Typography>
           <Stepper activeStep={activeStep} className={classes.stepper}>
             {steps.map((label) => (
@@ -140,28 +186,49 @@ const Questionario = () => {
           <React.Fragment>
             {activeStep === steps.length ? (
               <React.Fragment>
-                <Typography variant="h5" gutterBottom>
-                  Thank you for your order.
-                </Typography>
-                <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order confirmation, and will
-                  send you an update when your order has shipped.
-                </Typography>
+                {respostaQuestionario()}
               </React.Fragment>
             ) : (
               <React.Fragment>
-                {stepsComponents[activeStep].map((label) => (
-                  <Grid key={label} item xs={12}>
+                
+                {titulo('Quais sintomas está sentindo?', 'Possui alguma dessas doenças?', 'Possui outros sinais e/ou sintomas?')}
+                {stepsComponents[activeStep].map((label, index) => (
+                  <Grid key={index} item xs={12}>
                     <FormControlLabel
-                      // control={<Checkbox color="secondary" name="difRespirar" value={sintomasGerais['difRespirar']} onChange={(event) => {setSintomasGerais({...sintomasGerais, difRespirar: event.target.checked})}} />}
-                      label={label}
+                      control={<Checkbox color="secondary" name={label[0]} checked={questoes[activeStep][label[0]]} onChange={(event) => {setQuestoes({...questoes, [activeStep]: {...questoes[activeStep], [event.target.name]: event.target.checked}})}} />}
+                      label={label[1]}
                     />
                   </Grid>
                 ))}
+                {titulo('Há quanto tempo sente esse(s) sintoma(s)?')}
+                {stepsComponentsTime.map((label, index) => {
+                  if (activeStep === 0){
+                    return(
+                      <Grid key={index} item xs={12}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox color="secondary" name={label[0]} 
+                            checked={questoes[activeStep]['tempo'][label[0]]} 
+                            onChange={async (event) => {
+                              setQuestoes({...questoes, [activeStep]: {...questoes[activeStep], tempo: { 
+                                today: false,
+                                oneToSeven: false,
+                                eightToFourTeen: false,
+                                moreFourTeen: false,
+                                [event.target.name]: event.target.checked }}})
+                              }} 
+                          />}
+                          label={label[1]}
+                        />
+                      </Grid>
+                    )
+                    
+                  }
+                })}
                 <div className={classes.buttons}>
                   {activeStep !== 0 && (
                     <Button onClick={handleBack} className={classes.button}>
-                      Back
+                      Anterior
                     </Button>
                   )}
                   <Button
@@ -170,7 +237,7 @@ const Questionario = () => {
                     onClick={handleNext}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                    {activeStep === steps.length - 1 ? 'Encerrar Questionário' : 'Próximo'}
                   </Button>
                 </div>
               </React.Fragment>
@@ -178,7 +245,7 @@ const Questionario = () => {
           </React.Fragment>
         </Paper>
         {/* <Copyright /> */}
-      </main>
+      </div>
     </React.Fragment>
   );
 }

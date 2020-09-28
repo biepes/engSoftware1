@@ -6,12 +6,13 @@ module.exports = {
         const cpf = parseInt(req.body.cpf);
         const cep = parseInt(req.body.cep);
         const {email} = req.body;
+        const {username} = req.body;
         const {senha} = req.body;
 
-        let user = await User.findOne({ email })
+        let user = await User.findOne({ username })
 
         if (!user) {
-            user = await User.create({nome, cpf, cep, email, senha});
+            user = await User.create({nome, cpf, cep, email, username, senha});
             return res.json(user);
         } else {
             return res.json(null)

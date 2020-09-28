@@ -1,8 +1,7 @@
 import React from "react";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
-import Component from "./pages/App";
-import Questionario from "./pages/Questionario/Questionario"
+import Component from "./pages/App/App";
 import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 
 // Gerenciamento de Estado
@@ -12,11 +11,11 @@ const App = ({ isAuthenticated }) => {
   return (
     <HashRouter>
       <Switch>
-        <PrivateRoute exact path="/" component={Component} />
-        <Route path="/app/questionario" component={Questionario}/>
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={SignUp} />
-        {/* <PublicRoute path="/login" component={Login} /> */}
+        <Route exact path="/" render={() => <Redirect to="/app/home" />}/>
+        <Route exact path="/app" render={() => <Redirect to="/app/home" />} />
+        <PrivateRoute path="/app" component={Component} />
+        <PublicRoute path="/login" component={Login} />
+        <PublicRoute path="/signup" component={SignUp} />
       </Switch>
     </HashRouter>
   );

@@ -7,4 +7,5 @@ const routes = express.Router();
 routes.post('/signup', UserController.store)
 routes.get('/verifysession', SessionController.show)
 routes.post('/createsession', SessionController.store)
+routes.get('/deletesession', SessionController.delete)
 module.exports = routes;

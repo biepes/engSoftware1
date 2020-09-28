@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -7,7 +7,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -16,22 +15,12 @@ import Container from '@material-ui/core/Container';
 // Gerenciamento de Estado
 import { connect } from 'react-redux';
 import { setIsAuthenticated } from '../actions';
+import Cookies from 'universal-cookie';
 
 // Routes
 import { withRouter } from 'react-router-dom';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import api from '../services/api'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -54,12 +43,43 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Login = ({setIsAuthenticated}) => {
+const Login = ({setIsAuthenticated, history}) => {
   const classes = useStyles();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const cookies = new Cookies();
   useEffect(() => {
+    const verifysession = async () => {
+      const response = await api.get('/verifysession', {
+        params: {
+          'session': cookies.get('session')
+        },
+      })
+
+      if (response.data) {
+        setIsAuthenticated(true);
+        history.push('/app')
+      } else {
+        setIsAuthenticated(false);
+      }
+    }
+    verifysession()
     
-    // setIsAuthenticated(true);
-  })
+  }, [])
+
+  const doLogin = async () => {
+    const response = await api.post('/createsession', {
+      username: username,
+      senha: password
+    })
+
+    if (response.data) {
+      cookies.set('session',response.data.session, {path: '/'})
+      await setIsAuthenticated(true);
+      history.push('/app/home')
+    }
+  }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -76,10 +96,11 @@ const Login = ({setIsAuthenticated}) => {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="Usuário"
+            name="username"
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
             autoFocus
           />
           <TextField
@@ -91,38 +112,37 @@ const Login = ({setIsAuthenticated}) => {
             label="Password"
             type="password"
             id="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
             autoComplete="current-password"
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
-          />
+          /> */}
           <Button
-            type="submit"
             fullWidth
             variant="contained"
             color="primary"
+            onClick={doLogin}
             className={classes.submit}
           >
             Fazer Login
           </Button>
           <Grid container>
-            <Grid item xs>
+            {/* <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
               </Link>
-            </Grid>
+            </Grid> */}
             <Grid item>
               <Link href="#/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
+                {"Criar Conta"}
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }
