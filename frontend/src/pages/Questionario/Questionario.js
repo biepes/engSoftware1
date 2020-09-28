@@ -11,6 +11,8 @@ import Grid from '@material-ui/core/Grid';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
+import Cookies from 'universal-cookie';
+
 // Gerenciamento de Estado
 import { connect } from 'react-redux';
 import { setIsAuthenticated } from '../../actions';
@@ -91,7 +93,7 @@ const stepsComponentsTime = [
 
 const Questionario = () => {
   const classes = useStyles();
-
+  const [resposta, setResposta] = useState(1)
   const [activeStep, setActiveStep] = useState(0);
   const [questoes, setQuestoes] = useState({
     0: {
@@ -153,20 +155,20 @@ const Questionario = () => {
     }
   }
 
-  const respostaQuestionario = () => {
-    // const response = await api.post('/signup', {
-    //   nome: nome,
-    //   cpf: cpf,
-    //   cep: cep,
-    //   email: email,
-    //   senha: senha
-    // })
-    // const response = respostas()
-    return (
-      <div>
-        <Respostas resposta={3} />
-      </div>
-    )
+  useEffect(() => {
+    if (activeStep === steps.length) {
+      respostaQuestionario();
+    }
+  }, [activeStep])
+  const cookies = new Cookies();
+  const respostaQuestionario = async () => {
+    const res = await api.post('/question', {
+      sintomasGerais: questoes[0],
+      comorbidades: questoes[1],
+      sintomasEspecificos: questoes[2],
+      session: cookies.get('session')
+    })
+    await setResposta(res.data)
   }
 
   return (
@@ -186,7 +188,7 @@ const Questionario = () => {
           <React.Fragment>
             {activeStep === steps.length ? (
               <React.Fragment>
-                {respostaQuestionario()}
+                <Respostas resposta={resposta} />
               </React.Fragment>
             ) : (
               <React.Fragment>

@@ -47,6 +47,7 @@ const Login = ({setIsAuthenticated, history}) => {
   const classes = useStyles();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
 
   const cookies = new Cookies();
   useEffect(() => {
@@ -78,6 +79,8 @@ const Login = ({setIsAuthenticated, history}) => {
       cookies.set('session',response.data.session, {path: '/'})
       await setIsAuthenticated(true);
       history.push('/app/home')
+    } else {
+      setError(true)
     }
   }
   return (
@@ -99,6 +102,7 @@ const Login = ({setIsAuthenticated, history}) => {
             id="username"
             label="Usuário"
             name="username"
+            error={error}
             value={username}
             onChange={(event) => setUsername(event.target.value)}
             autoFocus

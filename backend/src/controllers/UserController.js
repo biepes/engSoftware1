@@ -1,22 +1,29 @@
-const User = require('../models/Usuario')
+const User = require("../models/Usuario");
 
 module.exports = {
-    async store(req, res) {
-        const {nome} = req.body;
-        const cpf = parseInt(req.body.cpf);
-        const cep = parseInt(req.body.cep);
-        const {email} = req.body;
-        const {username} = req.body;
-        const {senha} = req.body;
+  async store(req, res) {
+    const { nome } = req.body;
+    const idade = parseInt(req.body.idade);
+    const cpf = parseInt(req.body.cpf);
+    const cep = parseInt(req.body.cep);
+    const { email } = req.body;
+    const { username } = req.body;
+    const { senha } = req.body;
+    let user = await User.findOne({ username });
 
-        let user = await User.findOne({ username })
-
-        if (!user) {
-            user = await User.create({nome, cpf, cep, email, username, senha});
-            return res.json(user);
-        } else {
-            return res.json(null)
-        }
-
+    if (!user) {
+      user = await User.create({
+        nome,
+        idade,
+        cpf,
+        cep,
+        email,
+        username,
+        senha,
+      });
+      return res.json(user);
+    } else {
+      return res.json(null);
     }
+  },
 };

@@ -1,40 +1,38 @@
-import React, { useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-
-import { setIsAuthenticated } from '../actions';
+import React, { useState } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 
 // Gerenciamento de Estado
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 // Routes
-import { withRouter } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 
-import api from '../services/api'
+import api from "../services/api";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
   submit: {
@@ -44,31 +42,36 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = ({ history }) => {
   const classes = useStyles();
-  
-  const [ nome, setNome ] = useState('');
-  const [ cpf, setCPF ] = useState('');
-  const [ cep, setCep ] = useState('');
-  const [ username, setUsername ] = useState('');
-  const [ email, setEmail ] = useState('');
-  const [ senha, setSenha ] = useState('');
-  const [ termo, setTermo ] = useState(false);
+
+  const [nome, setNome] = useState("");
+  const [cpf, setCPF] = useState("");
+  const [cep, setCep] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [idade, setIdade] = useState("");
+  const [termo, setTermo] = useState(false);
+
+  const [error, setError] = useState(false);
 
   const submit = async () => {
     if (nome && cpf && cep && email && senha && termo) {
-      const response = await api.post('/signup', {
+      const response = await api.post("/signup", {
         nome: nome,
         cpf: cpf,
         cep: cep,
         email: email,
         username: username,
-        senha: senha
-      })
+        senha: senha,
+        idade: idade,
+      });
       if (response.data) {
-        await setIsAuthenticated(true)
-        history.push('/')
+        history.push("/");
+      } else {
+        setError(true)
       }
     }
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -82,7 +85,7 @@ const SignUp = ({ history }) => {
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12} >
+            <Grid item xs={12}>
               <TextField
                 autoComplete="fname"
                 name="Nome"
@@ -96,7 +99,19 @@ const SignUp = ({ history }) => {
                 onChange={(event) => setNome(event.target.value)}
               />
             </Grid>
-            <Grid item xs={12} >
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="idade"
+                label="Idade"
+                name="idade"
+                value={idade}
+                onChange={(event) => setIdade(event.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
@@ -141,6 +156,7 @@ const SignUp = ({ history }) => {
                 name="username"
                 label="Username"
                 id="username"
+                error={error}
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
               />
@@ -161,7 +177,13 @@ const SignUp = ({ history }) => {
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox value={termo} onChange={(event)=> setTermo(event.target.checked)} color="primary" />}
+                control={
+                  <Checkbox
+                    value={termo}
+                    onChange={(event) => setTermo(event.target.checked)}
+                    color="primary"
+                  />
+                }
                 label="Concordo do uso dos meus dados apenas para estatísticas do aplicativo"
               />
             </Grid>
@@ -186,6 +208,6 @@ const SignUp = ({ history }) => {
       </div>
     </Container>
   );
-}
+};
 
 export default withRouter(connect()(SignUp));
