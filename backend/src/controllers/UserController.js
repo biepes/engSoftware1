@@ -9,10 +9,10 @@ module.exports = {
     const { email } = req.body;
     const { username } = req.body;
     const { senha } = req.body;
-    let user = await User.findOne({ username });
+    let user = await User.storage.findOne({ username });
 
     if (!user) {
-      user = await User.create({
+      user = await User.storage.create({
         nome,
         idade,
         cpf,
