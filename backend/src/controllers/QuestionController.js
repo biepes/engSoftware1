@@ -19,7 +19,7 @@ module.exports = {
       idade
     );
 
-    user = await User.storage.findOneAndUpdate(
+    await User.storage.findOneAndUpdate(
       { username: user },
       { condicao: resposta }
     );

@@ -17,20 +17,20 @@ const generateResponse = (
   sintomasEspecificos,
   idade
 ) => {
-  sintomas =
+  const sintomas =
     sintomasGerais["dorGarganta"] +
     3 * sintomasGerais["difRespirar"] +
     10 * sintomasGerais["febre"] +
     sintomasGerais["tosse"];
 
-  outrasDoencas =
+  const outrasDoencas =
     comorbidades["diabetes"] +
     comorbidades["doencaCardiaca"] +
     comorbidades["doencaRenal"] +
     comorbidades["doencaRespiratoria"] +
     comorbidades["pressaoAlta"];
 
-  outrosSintomas =
+  const outrosSintomas =
     sintomasEspecificos["bocaOuDedoRoxo"] +
     sintomasEspecificos["palidez"] +
     sintomasEspecificos["pressaoBaixa"] +
