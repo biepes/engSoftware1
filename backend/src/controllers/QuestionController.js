@@ -20,7 +20,7 @@ module.exports = {
     );
 
     await User.storage.findOneAndUpdate(
-      { username: user },
+      { username: user.username },
       { condicao: resposta }
     );
 

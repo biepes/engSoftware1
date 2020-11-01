@@ -4,12 +4,14 @@ const UserSchema = new mongoose.Schema({
   nome: String,
   idade: Number,
   cpf: Number,
-  cep: Number,
+  cep: String,
   email: String,
   username: String,
   senha: String,
   condicao: Number,
 });
+
+const storage = mongoose.model("Usuario", UserSchema);
 
 const generateResponse = (
   sintomasGerais,
@@ -61,7 +63,31 @@ const generateResponse = (
   return resposta;
 };
 
+const verifyNearbyCases = async (user) => {
+  const confirmados = await verifyByCondition(user, 4);
+  const suspeitos = await verifyByCondition(user, 3);
+  const descartado1 = await verifyByCondition(user, 1);
+  const descartado2 = await verifyByCondition(user, 2);
+
+  return {
+    confirmados: confirmados.length,
+    suspeitos: suspeitos.length,
+    descartados: descartado1.length + descartado2.length,
+  };
+};
+
+const verifyByCondition = async (user, condition) => {
+  return await storage.find({
+    condicao: condition,
+    cep: {
+      $regex: `^${user.cep.substring(0, 5)}-(?!${user.cep.substring(6, 9)}.*)`,
+    },
+  });
+};
+
+// /^[${user.cep.toString().substring(0, 5)}]{0,5}
 module.exports = {
-  storage: mongoose.model("Usuario", UserSchema),
+  storage: storage,
   generateResponse,
+  verifyNearbyCases,
 };
