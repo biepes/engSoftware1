@@ -1,16 +1,15 @@
-import React from 'react';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import {Assignment, Home} from '@material-ui/icons';
-import Link from '@material-ui/core/Link';
+import Link from "@material-ui/core/Link";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import { Assignment, Home } from "@material-ui/icons";
+import React from "react";
 
 export const mainListItems = (exit) => {
-
-  return(
+  return (
     <div>
-      <Link href='#/app/home'>
+      <Link href="#/app/home">
         <ListItem button>
           <ListItemIcon>
             <Home />
@@ -18,7 +17,7 @@ export const mainListItems = (exit) => {
           <ListItemText primary="Home" />
         </ListItem>
       </Link>
-      <Link href='#/app/questionario'>
+      <Link href="#/app/questionario">
         <ListItem button>
           <ListItemIcon>
             <Assignment />
@@ -26,7 +25,15 @@ export const mainListItems = (exit) => {
           <ListItemText primary="Questionario" />
         </ListItem>
       </Link>
-      <Link href='#/'>
+      <Link href="#/app/casosproximos">
+        <ListItem button>
+          <ListItemIcon>
+            <Assignment />
+          </ListItemIcon>
+          <ListItemText primary="Casos Próximos" />
+        </ListItem>
+      </Link>
+      <Link href="#/">
         <ListItem button onClick={exit}>
           <ListItemIcon>
             <Assignment />
@@ -35,11 +42,11 @@ export const mainListItems = (exit) => {
         </ListItem>
       </Link>
     </div>
-)};
+  );
+};
 
 export const secondaryListItems = (
   <div>
     <ListSubheader inset></ListSubheader>
-    
   </div>
 );

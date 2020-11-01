@@ -1,40 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Grid from "@material-ui/core/Grid";
+import Link from "@material-ui/core/Link";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import React, { useEffect, useState } from "react";
 // Gerenciamento de Estado
-import { connect } from 'react-redux';
-import { setIsAuthenticated } from '../actions';
-import Cookies from 'universal-cookie';
-
+import { connect } from "react-redux";
 // Routes
-import { withRouter } from 'react-router-dom';
-
-import api from '../services/api'
+import { withRouter } from "react-router-dom";
+import Cookies from "universal-cookie";
+import { setIsAuthenticated } from "../actions";
+import api from "../services/api";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -42,47 +37,45 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-const Login = ({setIsAuthenticated, history}) => {
+const Login = ({ setIsAuthenticated, history }) => {
   const classes = useStyles();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
   const cookies = new Cookies();
   useEffect(() => {
     const verifysession = async () => {
-      const response = await api.get('/verifysession', {
+      const response = await api.get("/verifysession", {
         params: {
-          'session': cookies.get('session')
+          session: cookies.get("session"),
         },
-      })
+      });
 
       if (response.data) {
         setIsAuthenticated(true);
-        history.push('/app')
+        history.push("/app");
       } else {
         setIsAuthenticated(false);
       }
-    }
-    verifysession()
-    
-  }, [])
+    };
+    verifysession();
+  }, []);
 
   const doLogin = async () => {
-    const response = await api.post('/createsession', {
+    const response = await api.post("/createsession", {
       username: username,
-      senha: password
-    })
+      senha: password,
+    });
 
     if (response.data) {
-      cookies.set('session',response.data.session, {path: '/'})
+      cookies.set("session", response.data.session, { path: "/" });
       await setIsAuthenticated(true);
-      history.push('/app/home')
+      history.push("/app/home");
     } else {
-      setError(true)
+      setError(true);
     }
-  }
+  };
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -149,15 +142,15 @@ const Login = ({setIsAuthenticated, history}) => {
       </div>
     </Container>
   );
-}
-
+};
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.isAuthenticated,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setIsAuthenticated: (isAuthenticated) => dispatch(setIsAuthenticated(isAuthenticated)),
+  setIsAuthenticated: (isAuthenticated) =>
+    dispatch(setIsAuthenticated(isAuthenticated)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));

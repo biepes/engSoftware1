@@ -1,36 +1,29 @@
-import React, { useEffect } from "react";
-import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
-import MenuIcon from "@material-ui/icons/Menu";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
+import IconButton from "@material-ui/core/IconButton";
+import List from "@material-ui/core/List";
+import { makeStyles } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-
-import { HashRouter, Route, Switch } from "react-router-dom";
-
-import { mainListItems, secondaryListItems } from "./listItems";
-
-import api from "../../services/api";
-
+import clsx from "clsx";
+import React from "react";
 // Gerenciamento de Estado
 import { connect } from "react-redux";
-import { setIsAuthenticated } from "../../actions";
+import { HashRouter, Route, Switch, withRouter } from "react-router-dom";
 import Cookies from "universal-cookie";
-
-import Questionario from "../Questionario/Questionario";
+import { setIsAuthenticated } from "../../actions";
+import api from "../../services/api";
+import CasosProximos from "../CasosProximos/CasosProximos";
 import Home from "../Home";
-
-// Routes
-import { withRouter } from "react-router-dom";
+import Questionario from "../Questionario/Questionario";
+import { mainListItems, secondaryListItems } from "./listItems";
 
 const drawerWidth = 240;
 
@@ -126,7 +119,7 @@ const App = ({ setIsAuthenticated }) => {
   const cookies = new Cookies();
 
   const exit = async () => {
-    const response = await api.get("/deletesession", {
+    await api.get("/deletesession", {
       params: {
         session: cookies.get("session"),
       },
@@ -194,6 +187,7 @@ const App = ({ setIsAuthenticated }) => {
             <Switch>
               <Route path="/app/home" component={Home} />
               <Route path="/app/questionario" component={Questionario} />
+              <Route path="/app/casosproximos" component={CasosProximos} />
             </Switch>
           </HashRouter>
         </Container>

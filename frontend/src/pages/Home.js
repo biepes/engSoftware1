@@ -1,20 +1,12 @@
-import React, { useEffect, useState } from 'react';
-
+import React from "react";
 // Gerenciamento de Estado
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 // Routes
-import { withRouter } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 
 const Home = () => {
-
-  return (
-        <div>
-            something
-        </div>
-
-  )
-}
-
+  return <div>something</div>;
+};
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.isAuthenticated,
