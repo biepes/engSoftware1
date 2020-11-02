@@ -33,6 +33,14 @@ export const mainListItems = (exit) => {
           <ListItemText primary="Casos Próximos" />
         </ListItem>
       </Link>
+      <Link href="#/app/casosregiao">
+        <ListItem button>
+          <ListItemIcon>
+            <Assignment />
+          </ListItemIcon>
+          <ListItemText primary="Casos Por Região" />
+        </ListItem>
+      </Link>
       <Link href="#/">
         <ListItem button onClick={exit}>
           <ListItemIcon>

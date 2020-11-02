@@ -21,6 +21,7 @@ import Cookies from "universal-cookie";
 import { setIsAuthenticated } from "../../actions";
 import api from "../../services/api";
 import CasosProximos from "../CasosProximos/CasosProximos";
+import CasosRegiao from "../CasosRegiao/CasosRegiao";
 import Home from "../Home";
 import Questionario from "../Questionario/Questionario";
 import { mainListItems, secondaryListItems } from "./listItems";
@@ -188,6 +189,7 @@ const App = ({ setIsAuthenticated }) => {
               <Route path="/app/home" component={Home} />
               <Route path="/app/questionario" component={Questionario} />
               <Route path="/app/casosproximos" component={CasosProximos} />
+              <Route path="/app/casosregiao" component={CasosRegiao} />
             </Switch>
           </HashRouter>
         </Container>
