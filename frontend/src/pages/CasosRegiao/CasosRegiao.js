@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const CasosProximos = () => {
+const CasosRegiao = () => {
   const classes = useStyles();
 
   const [dataGeral, setdataGeral] = useState({
@@ -124,4 +124,4 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.isAuthenticated,
 });
 
-export default withRouter(connect(mapStateToProps, null)(CasosProximos));
+export default withRouter(connect(mapStateToProps, null)(CasosRegiao));
