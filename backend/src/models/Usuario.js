@@ -80,12 +80,16 @@ const verifyByCondition = async (user, condition) => {
   return await storage.find({
     condicao: condition,
     cep: {
-      $regex: `^${user.cep.substring(0, 5)}-(?!${user.cep.substring(6, 9)}.*)`,
+      $regex: `^${user.cep.substring(0, 5)}.*`,
+    },
+    username: {
+      $not: {
+        $regex: `^${user.username}`,
+      },
     },
   });
 };
 
-// /^[${user.cep.toString().substring(0, 5)}]{0,5}
 module.exports = {
   storage: storage,
   generateResponse,
