@@ -44,8 +44,9 @@ const CasosRegiao = () => {
 
   const [dataRegioes, setDataRegioes] = useState([
     {
-      _id: "Centro-Oeste",
-      listaMunicipios: [{ _id: "", casosAcumulado: 0, obitosAcumulado: 0 }],
+      _id: "",
+      casosAcumulado: 0,
+      obitosAcumulado: 0,
     },
   ]);
 
@@ -73,10 +74,9 @@ const CasosRegiao = () => {
 
     const getRegioes = async () => {
       let data = await getInfo(
-        "https://xx9p7hp1p7.execute-api.us-east-1.amazonaws.com/prod/PortalSintese"
+        "https://xx9p7hp1p7.execute-api.us-east-1.amazonaws.com/prod/PortalSinteseSep"
       );
-      data.shift();
-      setDataRegioes(data);
+      setDataRegioes(data[1]);
     };
     getRegioes();
   }, []);
@@ -94,25 +94,21 @@ const CasosRegiao = () => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Estado</TableCell>
-              <TableCell align="right">Região</TableCell>
+              <TableCell>Região</TableCell>
               <TableCell align="right">Casos</TableCell>
               <TableCell align="right">Óbitos</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {dataRegioes.map((regiao) =>
-              regiao.listaMunicipios.map((row) => (
-                <TableRow key={row._id}>
-                  <TableCell component="th" scope="row">
-                    {row._id}
-                  </TableCell>
-                  <TableCell align="right">{regiao._id}</TableCell>
-                  <TableCell align="right">{row.casosAcumulado}</TableCell>
-                  <TableCell align="right">{row.obitosAcumulado}</TableCell>
-                </TableRow>
-              ))
-            )}
+            {dataRegioes.map((regiao) => (
+              <TableRow key={regiao._id}>
+                <TableCell component="th" scope="row">
+                  {regiao._id}
+                </TableCell>
+                <TableCell align="right">{regiao.casosAcumulado}</TableCell>
+                <TableCell align="right">{regiao.obitosAcumulado}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
