@@ -22,7 +22,9 @@ import { setIsAuthenticated } from "../../actions";
 import api from "../../services/api";
 import CasosProximos from "../CasosProximos/CasosProximos";
 import CasosRegiao from "../CasosRegiao/CasosRegiao";
+import Help from "../Help/Help";
 import Home from "../Home";
+import Hospitais from "../Hospitais/Hospitais";
 import Questionario from "../Questionario/Questionario";
 import { mainListItems, secondaryListItems } from "./listItems";
 
@@ -190,6 +192,8 @@ const App = ({ setIsAuthenticated }) => {
               <Route path="/app/questionario" component={Questionario} />
               <Route path="/app/casosproximos" component={CasosProximos} />
               <Route path="/app/casosregiao" component={CasosRegiao} />
+              <Route path="/app/help" component={Help} />
+              <Route path="/app/hospitais" component={Hospitais} />
             </Switch>
           </HashRouter>
         </Container>

@@ -5,12 +5,14 @@ const mongoose = require('mongoose');
 const routes = require('./routes');
 const cors = require('cors');
 const app = express();
+const insert = require('./data/InsertDb')
 
 mongoose.connect('mongodb://root:admin@127.0.0.1:27017', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
 })
+insert.store()
 app.use(cookiesMiddleware())
 // app.use(cookieParser());
 app.use(express.json())

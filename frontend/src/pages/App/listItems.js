@@ -3,7 +3,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
-import { Assignment, Home } from "@material-ui/icons";
+import { Assignment, ExitToApp, Help, Home, Info } from "@material-ui/icons";
 import React from "react";
 
 export const mainListItems = (exit) => {
@@ -28,7 +28,7 @@ export const mainListItems = (exit) => {
       <Link href="#/app/casosproximos">
         <ListItem button>
           <ListItemIcon>
-            <Assignment />
+            <Info />
           </ListItemIcon>
           <ListItemText primary="Casos Próximos" />
         </ListItem>
@@ -36,17 +36,33 @@ export const mainListItems = (exit) => {
       <Link href="#/app/casosregiao">
         <ListItem button>
           <ListItemIcon>
-            <Assignment />
+            <Info />
           </ListItemIcon>
           <ListItemText primary="Casos Por Região" />
+        </ListItem>
+      </Link>
+      <Link href="#/app/hospitais">
+        <ListItem button>
+          <ListItemIcon>
+            <Info />
+          </ListItemIcon>
+          <ListItemText primary="Hospitais" />
+        </ListItem>
+      </Link>
+      <Link href="#/app/help">
+        <ListItem button>
+          <ListItemIcon>
+            <Help />
+          </ListItemIcon>
+          <ListItemText primary="Help" />
         </ListItem>
       </Link>
       <Link href="#/">
         <ListItem button onClick={exit}>
           <ListItemIcon>
-            <Assignment />
+            <ExitToApp />
           </ListItemIcon>
-          <ListItemText primary="exit" />
+          <ListItemText primary="Sair" />
         </ListItem>
       </Link>
     </div>
